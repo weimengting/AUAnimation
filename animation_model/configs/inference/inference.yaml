@@ -1,0 +1,68 @@
+exp_name: Animation
+width: 512
+height: 512
+
+
+data:
+  video_path: '/scratch/cs/faceedit/mengting/data/CelebV-HQ/videos/-2KGPYEFnsU_9.mp4'
+  render_dir: '/scratch/cs/faceedit/mengting/data/CelebV-HQ/render_videos'
+  ref_frame_idx: 0          
+  ref_image_path: null      
+  frame_range: [0, 120]    
+seed: 42
+
+
+
+
+base_model_path: '/scratch/cs/faceedit/mengting/diffusion_models/stable-diffusion-v1-5'
+vae_model_path: '/scratch/cs/faceedit/mengting/diffusion_models/sd-vae-ft-mse'
+image_encoder_path: '/scratch/cs/faceedit/mengting/diffusion_models/image_encoder'
+
+
+ckpt_dir: '/scratch/cs/faceedit/mengting/projects/AUAnimation/redo/stage1/used-98087'
+motion_module_path: '/scratch/cs/faceedit/mengting/projects/AUAnimation/redo/stage2/saved_models/motion_module-35666.pth'
+
+num_inference_steps: 20
+guidance_scale: 3.5   
+enable_zero_snr: true
+weight_dtype: "fp16"
+
+guidance_types: ['render']
+
+noise_scheduler_kwargs:
+  num_train_timesteps: 1000
+  beta_start:          0.00085
+  beta_end:            0.012
+  beta_schedule:       "linear"
+  steps_offset:        1
+  clip_sample:         false
+
+unet_additional_kwargs:
+  use_inflated_groupnorm: true
+  unet_use_cross_frame_attention: false 
+  unet_use_temporal_attention: false
+  use_motion_module: true
+  motion_module_resolutions:
+  - 1
+  - 2
+  - 4
+  - 8
+  motion_module_mid_block: true 
+  motion_module_decoder_only: false
+  motion_module_type: Vanilla
+  motion_module_kwargs:
+    num_attention_heads: 8
+    num_transformer_block: 1
+    attention_block_types:
+    - Temporal_Self
+    - Temporal_Self
+    temporal_position_encoding: true
+    temporal_position_encoding_max_len: 32
+    temporal_attention_dim_div: 1
+
+guidance_encoder_kwargs:
+  guidance_embedding_channels: 320
+  guidance_input_channels: 3
+  block_out_channels: [16, 32, 96, 256]
+
+enable_xformers_memory_efficient_attention: false

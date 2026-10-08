@@ -1,0 +1,24 @@
+# weights / checkpoints
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.bin
+redo/
+pretrained_models/
+diffusion_models/
+
+# outputs / logs
+results/
+outputs/
+logs/
+wandb/
+*.out
+*.err
+*.mp4
+*.gif
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
